@@ -1,0 +1,14 @@
+ONEESAMA(1)
+===========
+
+NAME
+----
+
+oneesama - obscurely named elegant & enhanced seasonal anime marathon application
+
+DESCRIPTION
+-----------
+
+oneesama is a video playback server specialized for anime, and mostly made for
+the https://frenzy.moe[Season Kickoff Frenzy]. It is controlled via a REST API
+and has a long list of features that will be implemented one day.
