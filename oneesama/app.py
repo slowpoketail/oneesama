@@ -7,15 +7,14 @@
 # This program is Free Software under the non-terms
 # of the Anti-License. Do whatever the fuck you want.
 
-from .app import app
-from .api.views import api_views
+from flask import Flask
 
-#api = get_api(app)
-from .api import register_all
-from .api.resources import resources
+DATABASE = {
+    'name': '/tmp/oneesama.db',
+    'engine': 'peewee.SqliteDatabase',
+}
+DEBUG = True
+FILE_DIR = "/tmp"
 
-app.register_blueprint(api_views)
-register_all()
-
-def main():
-    app.run()
+app = Flask(__name__)
+app.config.from_object(__name__)

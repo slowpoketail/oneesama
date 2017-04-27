@@ -8,14 +8,6 @@
 # of the Anti-License. Do whatever the fuck you want.
 
 from .app import app
-from .api.views import api_views
+from flask_peewee.db import Database
 
-#api = get_api(app)
-from .api import register_all
-from .api.resources import resources
-
-app.register_blueprint(api_views)
-register_all()
-
-def main():
-    app.run()
+db = Database(app)
