@@ -11,17 +11,18 @@ from ..utils import *
 
 from ..models import *
 
-from werkzeug.utils import secure_filename
+from .. import config
 
 from flask import jsonify, request, Blueprint
+import os.path
 
 api_views = Blueprint('', __name__)
 
 @api_views.route('/api/file/<int:id>/content', methods=['PUT'])
 def put_file(id):
-    file_obj = get_or_404(File, id)
-    filename = secure_filename(file_obj.path)
-    with open("/tmp/{}".format(filename), mode="wb") as file:
+    filename = os.path.join(config.FILE_DIR,
+                            "oneesama:file:{}:content".format(id))
+    with open(filename, mode="wb") as file:
         file.write(request.data)
     return jsonify({"success": True})
 
