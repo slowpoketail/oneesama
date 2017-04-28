@@ -12,6 +12,10 @@ import json
 
 from urllib.request import quote
 
+from requests.auth import HTTPBasicAuth
+
+default_auth = HTTPBasicAuth("admin", "admin")
+
 json_headers = {"Content-Type": "application/json"}
 json_empty = json.dumps({})
 
@@ -69,6 +73,17 @@ class Client:
             "file": file_id,
         })
         return self._create_resource('/anime/', data)
+
+    def create_playlist_resource(self, name):
+        data = json.dumps({"name": name})
+        return self._create_resource('/playlist/', data)
+
+    def create_playlistentry_resource(self, playlist_id, anime_id):
+        data = json.dumps({
+            "playlist": playlist_id,
+            "anime": anime_id,
+        })
+        return self._create_resource('/playlistentry/', data)
 
     def get_anime_by_id(self, id):
         return self._get("/anime/{}/".format(id))
