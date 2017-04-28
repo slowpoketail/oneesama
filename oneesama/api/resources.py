@@ -18,6 +18,11 @@ class FileResource(RestResource):
         'path',
     )
 
+    def prepare_data(self, obj, data):
+        data["content_uri"] = "/file/{}/content".format(obj.id)
+        return data
+
+
 class AnimeResource(RestResource):
     include_resources = {
         'file': FileResource,
