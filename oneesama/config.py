@@ -7,9 +7,9 @@
 # This program is Free Software under the non-terms
 # of the Anti-License. Do whatever the fuck you want.
 
-from flask import Flask
-
-from . import config
-
-app = Flask(__name__)
-app.config.from_object(config)
+DATABASE = {
+        'name': '/tmp/oneesama.db',
+        'engine': 'peewee.SqliteDatabase',
+}
+DEBUG = True
+FILE_DIR = "/tmp"
