@@ -70,6 +70,6 @@ __all__ = [model.__name__ for model in models]
 
 def create_tables():
     for model in models:
-        model.create_tables()
+        model.create_table()
 
 
