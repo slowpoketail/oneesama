@@ -111,7 +111,7 @@ class Anime(BaseResource):
     def update(self):
         data = self._get()
         self._name = data["name"]
-        self._file_id = data["file"]
+        self._file_id = data["file"]["id"]
 
     @classmethod
     def create(cls, name, file_id):
