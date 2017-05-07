@@ -1,5 +1,8 @@
 ONEESAMA(1)
 ===========
+slowpoke <mail+git@slowpoke.io>
+:encoding: utf-8
+:doctype: manpage
 
 NAME
 ----
