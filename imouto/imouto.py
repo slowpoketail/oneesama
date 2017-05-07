@@ -27,20 +27,17 @@ json_empty = json.dumps({})
 BASE_URL = "http://localhost:5000/api/"
 
 
-class File:
+class BaseResource(ABC):
 
     base_url = BASE_URL
-    resource_name = "/file/"
-    resource_url = urljoin(base_url, resource_name)
 
     uri = property(lambda self: urljoin(self.resource_url, str(self._id)))
 
     id = property(lambda self: self._id)
-    content_uri = property(lambda self: self._content_uri)
 
-    def __init__(self, id, content_uri):
-        self._id = id
-        self._content_uri = content_uri
+    @abstractmethod
+    def __init__(self):
+        return NotImplemented
 
     @classmethod
     def _request(cls, method, uri="", data=json_empty):
@@ -57,13 +54,31 @@ class File:
         return cls._request(get)
 
     @classmethod
+    @abstractmethod
+    def create(cls):
+        data = cls._request(post)
+        return cls(data)
+
+    def delete(self):
+        return self._request(delete, uri=self.id)
+
+
+class File(BaseResource):
+
+    resource_name = "/file/"
+    resource_url = urljoin(BASE_URL, resource_name)
+
+    content_uri = property(lambda self: self._content_uri)
+
+    def __init__(self, id, content_uri):
+        self._id = id
+        self._content_uri = content_uri
+
+    @classmethod
     def create(cls):
         data = cls._request(post)
         id = data["id"]
         return cls(data["id"], data["content_uri"])
-
-    def delete(self):
-        return self._request(delete, uri=self.id)
 
     def upload(self, path):
         url = urljoin(self.base_url, self.content_uri)
