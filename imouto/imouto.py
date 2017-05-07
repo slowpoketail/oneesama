@@ -79,14 +79,12 @@ class File(BaseResource):
     content_uri = property(lambda self: self._content_uri)
 
     def __init__(self, id, content_uri):
-        super(File, self).__init__(self)
         self._id = id
         self._content_uri = content_uri
 
     def update(self):
         data = self._get()
         self._content_uri = data["content_uri"]
-
 
     @classmethod
     def create(cls):
@@ -106,7 +104,6 @@ class Anime(BaseResource):
     resource_url = urljoin(BASE_URL, resource_name)
 
     def __init__(self, id, name, file_id):
-        super(Anime, self).__init__(self)
         self._id = id
         self._name = name
         self._file_id = file_id
