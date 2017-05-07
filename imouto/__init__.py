@@ -11,4 +11,5 @@ from .imouto import *
 
 __all__ = [
     "File",
+    "Anime",
 ]

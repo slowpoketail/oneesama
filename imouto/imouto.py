@@ -39,11 +39,16 @@ class BaseResource(ABC):
     def __init__(self):
         return NotImplemented
 
+    @abstractmethod
+    def update(self):
+        return NotImplemented
+
     @classmethod
-    def _request(cls, method, uri="", data=json_empty):
+    def _request(cls, method, uri="", data=None):
+        json_data = json.dumps(data) if data else json_empty
         uri = "/{}/".format(str(uri))
         url = urljoin(cls.resource_url, uri)
-        r = method(url, auth=default_auth, headers=json_headers, data=data)
+        r = method(url, auth=default_auth, headers=json_headers, data=json_data)
         r.raise_for_status()
         if not r.json:
             raise AttributeError("no JSON in reply")
@@ -62,6 +67,12 @@ class BaseResource(ABC):
     def delete(self):
         return self._request(delete, uri=self.id)
 
+    def _get(self):
+        return self._request(get, uri=self.id)
+
+    def _put(self, data):
+        return self._request(put, uri=self.id, data=data)
+
 
 class File(BaseResource):
 
@@ -77,7 +88,6 @@ class File(BaseResource):
     @classmethod
     def create(cls):
         data = cls._request(post)
-        id = data["id"]
         return cls(data["id"], data["content_uri"])
 
     def upload(self, path):
@@ -85,3 +95,47 @@ class File(BaseResource):
         f = open(path, 'rb')
         r = put(url, data=f, auth=default_auth)
         r.raise_for_status()
+
+
+class Anime(BaseResource):
+
+    resource_name = "/anime/"
+    resource_url = urljoin(BASE_URL, resource_name)
+
+    def __init__(self, id, name, file_id):
+        self._id = id
+        self._name = name
+        self._file_id = file_id
+
+    def update(self):
+        data = self._get()
+        self._name = data["name"]
+        self._file_id = data["file"]
+
+    @classmethod
+    def create(cls, name, file_id):
+        data = {"name": name, "file": file_id}
+        reply = cls._request(post, data=data)
+        return cls(reply["id"], reply["name"], reply["file"])
+
+    @property
+    def name(self):
+        self.update()
+        return self._name
+
+    @name.setter
+    def name(self, name):
+        data = {"name": name}
+        self._put(data)
+        self._name = name
+
+    @property
+    def file(self):
+        self.update()
+        return self._file_id
+
+    @file.setter
+    def file(self, file_id):
+        data = {"file": file_id}
+        self._put(data)
+        self._file_id = file_id
