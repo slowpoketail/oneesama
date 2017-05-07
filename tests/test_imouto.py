@@ -28,6 +28,9 @@ def create_app(self):
     #app.config["LIVESERVER_PORT"] = 0
     return app
 
+def check_status(url):
+    return requests.get(url).status_code
+
 
 class TestFile(LiveServerTestCase):
 
@@ -37,7 +40,7 @@ class TestFile(LiveServerTestCase):
         f = File.create()
         assert hasattr(f, "id")
         assert hasattr(f, "content_uri")
-        assert requests.get(f.uri).status_code == 200
+        assert check_status(f.uri) == 200
         assert f.content_uri == "/file/{}/content".format(f.id)
 
     def test_unique(self):
@@ -48,4 +51,43 @@ class TestFile(LiveServerTestCase):
     def test_delete(self):
         f = File.create()
         f.delete()
-        assert requests.get(f.uri).status_code == 404
+        assert check_status(f.uri) == 404
+
+    def test_upload(self):
+        f = File.create()
+        f.upload("test.mkv")
+
+class TestAnime(LiveServerTestCase):
+
+    create_app = create_app
+
+    def test_create(self):
+        f = File.create()
+        a = Anime.create(name="foo", file_id=f.id)
+        assert hasattr(a, "id")
+        assert hasattr(a, "name")
+        assert hasattr(a, "file")
+        assert check_status(a.uri) == 200
+        assert a.name == "foo"
+        assert a.file == f.id
+
+    def test_unique(self):
+        f = File.create()
+        a1 = Anime.create(name="foo", file_id=f.id)
+        a2 = Anime.create(name="bar", file_id=f.id)
+        assert a1.id != a2.id
+
+    def test_update(self):
+        f1 = File.create()
+        a = Anime.create(name="foo", file_id=f1.id)
+        a.name = "bar"
+        assert a.name == "bar"
+        f2 = File.create()
+        a.file = f2.id
+        assert a.file == f2.id
+
+    def test_delete(self):
+        f = File.create()
+        a = Anime.create(name="foo", file_id=f.id)
+        a.delete()
+        assert check_status(a.uri) == 404
