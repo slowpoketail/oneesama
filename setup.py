@@ -4,7 +4,10 @@ from setuptools import setup
 
 setup(
     name='oneesama',
-    packages=['oneesama'],
+    packages=[
+        'oneesama',
+        'imouto',
+    ],
     include_package_data=True,
     entry_points={
         'console_scripts': [

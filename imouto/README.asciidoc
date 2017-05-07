@@ -1,0 +1,14 @@
+IMOUTO(3)
+=========
+slowpoke <mail+git@slowpoke.io>
+:encoding: utf-8
+:doctype: manpage
+
+
+NAME
+----
+imouto - intelligent mapping of URLs to objects
+
+DESCRIPTION
+-----------
+imouto is a small REST ORM that accompanies oneesama.
