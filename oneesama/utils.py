@@ -25,3 +25,7 @@ def create_admin_user(user="admin", password="admin"):
     admin = User.create(username=user, password="")
     admin.set_password(password)
     admin.save()
+
+
+def urljoin(base, uri):
+    return "/".join([base.rstrip("/"), uri.lstrip("/")])
