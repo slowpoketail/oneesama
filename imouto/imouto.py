@@ -97,6 +97,11 @@ class File(BaseResource):
         r = put(url, data=f, auth=default_auth)
         r.raise_for_status()
 
+    def __repr__(self):
+        return str({
+            "id": self.id,
+            "content_uri": self.content_uri,
+        })
 
 class Anime(BaseResource):
 
@@ -140,3 +145,10 @@ class Anime(BaseResource):
         data = {"file": file_id}
         self._put(data)
         self._file_id = file_id
+
+    def __repr__(self):
+        return str({
+            "id": self.id,
+            "name": self.name,
+            "file": self.file,
+        })
