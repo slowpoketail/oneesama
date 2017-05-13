@@ -48,6 +48,7 @@ class AnimeDispatcher:
     commands = (
         "add",
         "list",
+        "delete",
     )
 
     def add(self, name, path):
@@ -61,6 +62,13 @@ class AnimeDispatcher:
     def list(self):
         for anime in Anime.list():
             print("[{}] {}".format(anime.id, anime.name))
+
+    def delete(self, name):
+        """Delete all anime with the given name."""
+        for anime in Anime.list():
+            if anime.name == name:
+                anime.delete()
+                print("[{}] deleted".format(anime.id))
 
 
 def main():
