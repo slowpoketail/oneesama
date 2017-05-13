@@ -107,10 +107,10 @@ class File(BaseResource):
         r.raise_for_status()
 
     def __repr__(self):
-        return str({
+        return "{}{}".format(self.__class__.__name__, str({
             "id": self.id,
             "content_uri": self.content_uri,
-        })
+        }))
 
 
 class Anime(BaseResource):
@@ -157,8 +157,8 @@ class Anime(BaseResource):
         self._file_id = file_id
 
     def __repr__(self):
-        return str({
+        return "{}{}".format(self.__class__.__name__, str({
             "id": self.id,
             "name": self.name,
             "file": self.file,
-        })
+        }))
