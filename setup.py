@@ -6,15 +6,18 @@ setup(
     name='oneesama',
     packages=[
         'oneesama',
+        'onegai',
         'imouto',
     ],
     include_package_data=True,
     entry_points={
         'console_scripts': [
             'oneesama = oneesama:main',
+            'onegai = onegai:main',
         ],
     },
     install_requires=[
+        'plac',
         'flask',
         'flask_peewee',
     ],
