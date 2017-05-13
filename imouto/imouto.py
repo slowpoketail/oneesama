@@ -41,10 +41,11 @@ class BaseResource(ABC):
         return NotImplemented
 
     @classmethod
-    def _request(cls, method, uri="", data=None):
+    def _request(cls, method, uri="", data=None, query=""):
         json_data = json.dumps(data) if data else json_empty
         uri = "/{}/".format(str(uri))
         url = urljoin(cls.resource_url, uri)
+        url = urljoin(url, query)
         r = method(url, auth=default_auth, headers=json_headers, data=json_data)
         r.raise_for_status()
         if not r.json:
@@ -53,7 +54,15 @@ class BaseResource(ABC):
 
     @classmethod
     def list(cls):
-        return cls._request(get)
+        reply = cls._request(get)
+        meta = reply["meta"]
+        objects = reply["objects"]
+        while meta["next"]:
+            next_page_query = meta["next"].split("/")[-1]
+            next_page_reply = cls._request(get, query=next_page_query)
+            objects.extend(next_page_reply["objects"])
+            meta = next_page_reply["meta"]
+        return objects
 
     @classmethod
     @abstractmethod
@@ -102,6 +111,7 @@ class File(BaseResource):
             "id": self.id,
             "content_uri": self.content_uri,
         })
+
 
 class Anime(BaseResource):
 
