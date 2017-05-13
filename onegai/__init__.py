@@ -47,6 +47,7 @@ class Onegai:
 class AnimeDispatcher:
     commands = (
         "add",
+        "list",
     )
 
     def add(self, name, path):
@@ -56,6 +57,10 @@ class AnimeDispatcher:
         f.upload(path)
         a = Anime.create(name, f.id)
         logger.debug("new anime: {}".format(a))
+
+    def list(self):
+        for anime in Anime.list():
+            print(anime["name"])
 
 
 def main():
