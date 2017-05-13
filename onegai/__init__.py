@@ -60,7 +60,7 @@ class AnimeDispatcher:
 
     def list(self):
         for anime in Anime.list():
-            print(anime["name"])
+            print("[{}] {}".format(anime.id, anime.name))
 
 
 def main():
