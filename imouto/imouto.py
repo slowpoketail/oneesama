@@ -62,7 +62,7 @@ class BaseResource(ABC):
             next_page_reply = cls._request(get, query=next_page_query)
             objects.extend(next_page_reply["objects"])
             meta = next_page_reply["meta"]
-        return objects
+        return [cls.from_dict(obj) for obj in objects]
 
     @classmethod
     @abstractmethod
@@ -78,6 +78,14 @@ class BaseResource(ABC):
 
     def _put(self, data):
         return self._request(put, uri=self.id, data=data)
+
+    @classmethod
+    def get(cls, id):
+        return cls._request(get, uri=id)
+
+    @classmethod
+    def from_dict(cls, d):
+        return NotImplemented
 
 
 class File(BaseResource):
@@ -133,6 +141,16 @@ class Anime(BaseResource):
         data = {"name": name, "file": file_id}
         reply = cls._request(post, data=data)
         return cls(reply["id"], reply["name"], reply["file"])
+
+    @classmethod
+    def from_dict(cls, d):
+        id = d.get("id")
+        assert id
+        name = d.get("name")
+        assert name
+        file_id = d.get("file")
+        assert file_id
+        return cls(id, name, file_id)
 
     @property
     def name(self):
